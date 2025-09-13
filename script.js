@@ -418,7 +418,20 @@ function handleImageClick(e) {
 // Initialize modal when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     initializeModal();
-    initializeScrollVideo();
+    
+    // Delay video initialization to ensure all resources are loaded (helps with Cloudflare)
+    setTimeout(() => {
+        initializeScrollVideo();
+    }, 300);
+});
+
+// Also initialize on window load as a fallback for Cloudflare
+window.addEventListener('load', () => {
+    const video = document.getElementById('scrollVideo');
+    if (video && !video.dataset.initialized) {
+        console.log('Re-initializing video on window load');
+        initializeScrollVideo();
+    }
 });
 
 // Scroll-based video animation
@@ -430,6 +443,15 @@ function initializeScrollVideo() {
         console.error('Video or about section not found');
         return;
     }
+    
+    // Prevent double initialization
+    if (video.dataset.initialized) {
+        console.log('Video already initialized, skipping');
+        return;
+    }
+    
+    video.dataset.initialized = 'true';
+    console.log('Initializing scroll video animation');
     
     // Video timeframe settings (0:00 to 0:05 = 5 seconds)
     const startTime = 0; // 0:00 in seconds
@@ -542,6 +564,12 @@ function initializeScrollVideo() {
         console.error('Video ready state:', video.readyState);
         console.error('Video src:', video.src);
         console.error('Video currentSrc:', video.currentSrc);
+        
+        // Retry loading the video after a delay
+        setTimeout(() => {
+            console.log('Retrying video load...');
+            video.load();
+        }, 2000);
     });
     
     // Test video accessibility
@@ -685,8 +713,17 @@ function initializeScrollVideo() {
     
     // Also call immediately when video is ready
     video.addEventListener('loadeddata', () => {
+        console.log('Video data loaded, calling handleScroll');
         handleScroll();
     });
+    
+    // Additional fallback for Cloudflare - check if video is ready after a delay
+    setTimeout(() => {
+        if (video.readyState >= 2) { // HAVE_CURRENT_DATA
+            console.log('Video ready state check - calling handleScroll');
+            handleScroll();
+        }
+    }, 1000);
     
     // Call when frames are extracted to ensure proper initial state
     video.addEventListener('loadedmetadata', () => {

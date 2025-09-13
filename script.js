@@ -16,10 +16,10 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 window.addEventListener('scroll', () => {
     const navbar = document.querySelector('.navbar');
     if (window.scrollY > 50) {
-        navbar.style.background = 'rgba(255, 255, 255, 0.98)';
-        navbar.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
+        navbar.style.background = 'rgba(0, 0, 0, 0.98)';
+        navbar.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.3)';
     } else {
-        navbar.style.background = 'rgba(255, 255, 255, 0.95)';
+        navbar.style.background = 'rgba(0, 0, 0, 0.95)';
         navbar.style.boxShadow = 'none';
     }
 });
@@ -273,7 +273,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Image Modal/Lightbox functionality
 let modal, modalImage, closeBtn, prevBtn, nextBtn;
-let currentImageIndex = 0;
+    let currentImageIndex = 0;
 let modalImages = [];
 
 // Initialize modal elements
@@ -418,7 +418,299 @@ function handleImageClick(e) {
 // Initialize modal when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     initializeModal();
+    initializeScrollVideo();
 });
+
+// Scroll-based video animation
+function initializeScrollVideo() {
+    const video = document.getElementById('scrollVideo');
+    const aboutSection = document.getElementById('about');
+    
+    if (!video || !aboutSection) {
+        console.error('Video or about section not found');
+        return;
+    }
+    
+    // Video timeframe settings (0:00 to 0:05 = 5 seconds)
+    const startTime = 0; // 0:00 in seconds
+    const endTime = 5;   // 0:05 in seconds
+    const videoDuration = endTime - startTime; // 5 seconds
+    
+    // Frame caching system
+    const frameCache = new Map();
+    const totalFrames = 20; // Extract 20 frames for faster loading
+    let isVideoReady = false;
+    let framesExtracted = false;
+    
+    // Create canvas for frame extraction
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = 800; // Adjust based on your video
+    canvas.height = 450;
+    
+    // Frame extraction function
+    function extractFrame(time) {
+        return new Promise((resolve, reject) => {
+            video.currentTime = time;
+            
+            video.addEventListener('seeked', function onSeeked() {
+                video.removeEventListener('seeked', onSeeked);
+                
+                try {
+                    // Draw video frame to canvas
+                    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                    
+                    // Convert canvas to data URL
+                    const dataURL = canvas.toDataURL('image/jpeg', 0.9);
+                    
+                    // Verify the data URL is valid
+                    if (dataURL && dataURL.startsWith('data:image/')) {
+                        console.log(`Frame at ${time}s extracted successfully, size: ${dataURL.length} chars`);
+                        resolve(dataURL);
+                    } else {
+                        console.error(`Invalid data URL for frame at ${time}s:`, dataURL);
+                        reject(new Error('Invalid data URL'));
+                    }
+                } catch (error) {
+                    console.error(`Error extracting frame at ${time}s:`, error);
+                    reject(error);
+                }
+            }, { once: true });
+            
+            // Add timeout
+            setTimeout(() => {
+                reject(new Error(`Frame extraction timeout at ${time}s`));
+            }, 5000);
+        });
+    }
+    
+    // Extract all frames in background (no loading indicator)
+    async function extractAllFrames() {
+        console.log('Starting background frame extraction...');
+        
+        try {
+            // Extract frames sequentially to avoid overwhelming the browser
+            for (let i = 0; i < totalFrames; i++) {
+                const time = startTime + (i / (totalFrames - 1)) * videoDuration;
+                const dataURL = await extractFrame(time);
+                frameCache.set(i, dataURL);
+                
+                // Small delay to prevent browser freezing
+                await new Promise(resolve => setTimeout(resolve, 20));
+            }
+            
+            framesExtracted = true;
+            console.log('All frames extracted successfully!');
+            
+            // Ensure video is visible after frame extraction
+            handleScroll();
+        } catch (error) {
+            console.error('Frame extraction failed:', error);
+        }
+    }
+    
+    // Ensure video is loaded and set initial time
+    video.addEventListener('loadstart', () => {
+        console.log('Video load started');
+    });
+    
+    video.addEventListener('loadedmetadata', () => {
+        console.log('Video loaded, duration:', video.duration);
+        video.currentTime = startTime;
+        isVideoReady = true;
+        
+        // Start frame extraction
+        extractAllFrames();
+    });
+    
+    video.addEventListener('canplay', () => {
+        console.log('Video can play');
+    });
+    
+    video.addEventListener('canplaythrough', () => {
+        console.log('Video can play through');
+    });
+    
+    video.addEventListener('loadeddata', () => {
+        console.log('Video data loaded');
+    });
+    
+    video.addEventListener('error', (e) => {
+        console.error('Video error:', e);
+        console.error('Video error details:', video.error);
+        console.error('Video network state:', video.networkState);
+        console.error('Video ready state:', video.readyState);
+        console.error('Video src:', video.src);
+        console.error('Video currentSrc:', video.currentSrc);
+    });
+    
+    // Test video accessibility
+    console.log('Video element:', video);
+    console.log('Video src:', video.src);
+    console.log('Video currentSrc:', video.currentSrc);
+    
+    // Test if video file is accessible
+    fetch('images/DJI 0138.mp4', { method: 'HEAD' })
+        .then(response => {
+            console.log('Video file accessible:', response.ok, response.status);
+            if (!response.ok) {
+                console.error('Video file not accessible:', response.status, response.statusText);
+            }
+        })
+        .catch(error => {
+            console.error('Error checking video file:', error);
+        });
+    
+    // Try to load the video
+    video.load();
+    
+    // Performance optimization variables
+    let lastScrollTime = 0;
+    let lastVideoTime = 0;
+    const scrollThrottle = 8; // ~120fps for more responsive updates
+    const videoSeekThreshold = 0.02; // Smaller threshold for more responsive updates
+    
+    // Create frame display element
+    const frameDisplay = document.createElement('img');
+    frameDisplay.style.cssText = `
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 20px;
+        display: none;
+        z-index: 2;
+        min-height: 500px;
+        min-width: 100%;
+    `;
+    video.parentElement.style.position = 'relative';
+    video.parentElement.style.minHeight = '500px';
+    video.parentElement.appendChild(frameDisplay);
+    
+    // Ensure video has proper z-index
+    video.style.zIndex = '1';
+    
+    // Ensure video is visible initially
+    video.style.display = 'block';
+    
+    // Scroll event handler
+    function handleScroll() {
+        if (!isVideoReady) return;
+        
+        const rect = aboutSection.getBoundingClientRect();
+        const windowHeight = window.innerHeight;
+        
+        // Check if the about section is in view (more generous bounds)
+        const isInView = rect.top < windowHeight && rect.bottom > 0;
+        
+        // Debug logging removed for cleaner experience
+        
+        if (isInView) {
+            // Calculate scroll progress through the section
+            const sectionHeight = aboutSection.offsetHeight;
+            const scrollProgress = Math.max(0, Math.min(1, 
+                (windowHeight - rect.top) / (windowHeight + sectionHeight)
+            ));
+            
+            // Always show video when in section, use frames only when actively scrolling
+            if (frameCache.size > 0 && scrollProgress > 0.1) {
+                // Map scroll progress to frame index (ensure it only goes through once)
+                const frameIndex = Math.floor(scrollProgress * totalFrames);
+                const clampedFrameIndex = Math.max(0, Math.min(totalFrames - 1, frameIndex));
+                
+                // Find the best available frame (use last available if specific one isn't ready)
+                let frameData = frameCache.get(clampedFrameIndex);
+                if (!frameData) {
+                    // Find the last available frame before the target index, but don't go too far back
+                    const minFrameIndex = Math.max(0, clampedFrameIndex - 3); // Don't go more than 3 frames back
+                    for (let i = clampedFrameIndex; i >= minFrameIndex; i--) {
+                        if (frameCache.has(i)) {
+                            frameData = frameCache.get(i);
+                            break;
+                        }
+                    }
+                }
+                
+                if (frameData) {
+                    frameDisplay.src = frameData;
+                    frameDisplay.style.display = 'block';
+                    video.style.display = 'none';
+                } else {
+                    // No frames available yet, use video
+                    frameDisplay.style.display = 'none';
+                    video.style.display = 'block';
+                }
+            } else {
+                // Use video for initial display and when not actively scrolling
+                const targetTime = startTime + (scrollProgress * videoDuration);
+                const clampedTime = Math.max(startTime, Math.min(endTime, targetTime));
+                
+                if (video.duration > 0) {
+                    video.currentTime = clampedTime;
+                }
+                frameDisplay.style.display = 'none';
+                video.style.display = 'block';
+                // console.log('Showing video at time:', clampedTime);
+            }
+        } else {
+            // When not in view, show video at start time
+            if (video.duration > 0) {
+                video.currentTime = startTime;
+            }
+            frameDisplay.style.display = 'none';
+            video.style.display = 'block';
+        }
+    }
+    
+    // Add scroll listener with throttling
+    let ticking = false;
+    function requestTick() {
+        if (!ticking) {
+            requestAnimationFrame(() => {
+                handleScroll();
+                ticking = false;
+            });
+            ticking = true;
+        }
+    }
+    
+    window.addEventListener('scroll', requestTick);
+    
+    // Initial call to ensure video is visible
+    setTimeout(() => {
+        handleScroll();
+    }, 100);
+    
+    // Also call immediately when video is ready
+    video.addEventListener('loadeddata', () => {
+        handleScroll();
+    });
+    
+    // Call when frames are extracted to ensure proper initial state
+    video.addEventListener('loadedmetadata', () => {
+        // Set initial video time based on current scroll position
+        const rect = aboutSection.getBoundingClientRect();
+        const windowHeight = window.innerHeight;
+        
+        if (rect.top < windowHeight && rect.bottom > 0) {
+            const sectionHeight = aboutSection.offsetHeight;
+            const scrollProgress = Math.max(0, Math.min(1, 
+                (windowHeight - rect.top) / (windowHeight + sectionHeight)
+            ));
+            const targetTime = startTime + (scrollProgress * videoDuration);
+            const clampedTime = Math.max(startTime, Math.min(endTime, targetTime));
+            video.currentTime = clampedTime;
+        } else {
+            video.currentTime = startTime;
+        }
+        
+        // Ensure frame display is hidden initially
+        frameDisplay.style.display = 'none';
+        video.style.display = 'block';
+    });
+}
 
 // Dynamic Gallery System
 let allImages = [];
@@ -471,8 +763,8 @@ function initializeDynamicGallery() {
     loadMoreBtn.addEventListener('click', () => {
         if (!isLoading) {
             console.log('Load more button clicked');
-            loadMoreImages();
-            updateImageCount();
+        loadMoreImages();
+        updateImageCount();
         }
     });
 }
@@ -516,7 +808,7 @@ function loadMoreImages() {
     // Hide load more button if all images are loaded
     if (displayedImages >= allImages.length) {
         if (loadMoreBtn) {
-            loadMoreBtn.style.display = 'none';
+        loadMoreBtn.style.display = 'none';
         }
     }
     

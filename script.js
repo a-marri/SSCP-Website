@@ -423,7 +423,10 @@ document.addEventListener('DOMContentLoaded', () => {
 // Dynamic Gallery System
 let allImages = [];
 let displayedImages = 0;
-const imagesPerLoad = 20;
+const imagesPerLoad = 12; // Reduced batch size for better performance
+let isLoading = false;
+let imageLoadQueue = [];
+let lazyLoadObserver = null;
 
 // Define all available images
 const imageList = [
@@ -455,6 +458,9 @@ function initializeDynamicGallery() {
     // Shuffle images for variety
     allImages = [...imageList].sort(() => Math.random() - 0.5);
     
+    // Add skeleton styles
+    addSkeletonStyles();
+    
     // Load initial batch
     loadMoreImages();
     
@@ -463,13 +469,17 @@ function initializeDynamicGallery() {
     
     // Load more button event
     loadMoreBtn.addEventListener('click', () => {
-        console.log('Load more button clicked');
-        loadMoreImages();
-        updateImageCount();
+        if (!isLoading) {
+            console.log('Load more button clicked');
+            loadMoreImages();
+            updateImageCount();
+        }
     });
 }
 
 function loadMoreImages() {
+    if (isLoading) return;
+    
     const galleryGrid = document.getElementById('galleryGrid');
     const loadMoreBtn = document.getElementById('loadMoreBtn');
     
@@ -478,17 +488,30 @@ function loadMoreImages() {
         return;
     }
     
+    isLoading = true;
+    if (loadMoreBtn) {
+        loadMoreBtn.textContent = 'Loading...';
+        loadMoreBtn.disabled = true;
+    }
+    
     const startIndex = displayedImages;
     const endIndex = Math.min(startIndex + imagesPerLoad, allImages.length);
     
     console.log(`Loading images ${startIndex} to ${endIndex} of ${allImages.length}`);
     
+    // Create gallery items with skeleton placeholders
+    const fragment = document.createDocumentFragment();
     for (let i = startIndex; i < endIndex; i++) {
         const imageName = allImages[i];
-        const galleryItem = createGalleryItem(imageName, i);
-        galleryGrid.appendChild(galleryItem);
+        const galleryItem = createGalleryItemWithSkeleton(imageName, i);
+        fragment.appendChild(galleryItem);
         displayedImages++;
     }
+    
+    galleryGrid.appendChild(fragment);
+    
+    // Process images in batches to prevent blocking
+    processImageBatch(startIndex, endIndex);
     
     // Hide load more button if all images are loaded
     if (displayedImages >= allImages.length) {
@@ -499,6 +522,62 @@ function loadMoreImages() {
     
     // Re-add click listeners for new images
     addImageClickListeners();
+}
+
+function processImageBatch(startIndex, endIndex) {
+    // Reset loading state after a short delay
+    setTimeout(() => {
+        isLoading = false;
+        const loadMoreBtn = document.getElementById('loadMoreBtn');
+        if (loadMoreBtn) {
+            loadMoreBtn.textContent = 'Load More Photos';
+            loadMoreBtn.disabled = false;
+        }
+    }, 500);
+}
+
+function createGalleryItemWithSkeleton(imageName, index) {
+    const galleryItem = document.createElement('div');
+    galleryItem.className = 'gallery-item skeleton';
+    
+    // Create skeleton placeholder
+    const skeleton = document.createElement('div');
+    skeleton.className = 'skeleton-placeholder';
+    
+    // Create image element
+    const img = document.createElement('img');
+    img.src = `images/${imageName}`;
+    img.alt = `Race Photo ${index + 1}`;
+    img.className = 'gallery-img';
+    img.style.cursor = 'pointer';
+    img.style.display = 'none';
+    
+    // Add click listener directly to this image
+    img.addEventListener('click', () => {
+        console.log('Image clicked:', img.src);
+        openModal(img.src);
+    });
+    
+    // Handle image load
+    img.onload = function() {
+        const aspectRatio = this.naturalWidth / this.naturalHeight;
+        const sizeClass = getImageSizeClass(aspectRatio, this.naturalWidth, this.naturalHeight);
+        galleryItem.className = `gallery-item ${sizeClass}`;
+        skeleton.style.display = 'none';
+        img.style.display = 'block';
+    };
+    
+    // Handle image load errors
+    img.onerror = function() {
+        console.warn(`Failed to load image: ${imageName}`);
+        galleryItem.className = 'gallery-item standard';
+        skeleton.style.display = 'none';
+        img.style.display = 'block';
+    };
+    
+    galleryItem.appendChild(skeleton);
+    galleryItem.appendChild(img);
+    return galleryItem;
 }
 
 function createGalleryItem(imageName, index) {
@@ -568,4 +647,67 @@ function updateImageCount() {
     if (imageCount) {
         imageCount.textContent = `Showing ${displayedImages} of ${allImages.length} photos`;
     }
+}
+
+// Initialize lazy loading observer
+function initializeLazyLoading() {
+    if (lazyLoadObserver) return;
+    
+    lazyLoadObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const img = entry.target;
+                if (img.dataset.src) {
+                    img.src = img.dataset.src;
+                    img.removeAttribute('data-src');
+                    img.classList.remove('lazy');
+                    lazyLoadObserver.unobserve(img);
+                }
+            }
+        });
+    }, {
+        rootMargin: '50px 0px', // Start loading 50px before entering viewport
+        threshold: 0.1
+    });
+}
+
+// Add skeleton CSS styles
+function addSkeletonStyles() {
+    if (document.getElementById('skeleton-styles')) return;
+    
+    const style = document.createElement('style');
+    style.id = 'skeleton-styles';
+    style.textContent = `
+        .skeleton-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s infinite;
+            border-radius: 15px;
+        }
+        
+        .gallery-item.skeleton {
+            background: #f0f0f0;
+        }
+        
+        @keyframes skeleton-loading {
+            0% {
+                background-position: 200% 0;
+            }
+            100% {
+                background-position: -200% 0;
+            }
+        }
+        
+        .gallery-img.lazy {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .gallery-img:not(.lazy) {
+            opacity: 1;
+        }
+    `;
+    document.head.appendChild(style);
 }

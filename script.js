@@ -212,6 +212,30 @@ function animateCounter(element, target, suffix = '', duration = 2000) {
     }, 16);
 }
 
+// Email obfuscation function
+function setupEmailObfuscation() {
+    const contactLink = document.getElementById('contact-email');
+    if (contactLink) {
+        contactLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Split email into parts to obfuscate
+            const emailParts = [
+                'contactsolarcar',
+                '@',
+                'lists',
+                '.',
+                'stanford',
+                '.',
+                'edu'
+            ];
+            
+            const email = emailParts.join('');
+            window.location.href = 'mailto:' + email;
+        });
+    }
+}
+
 // Initialize counter animations
 document.addEventListener('DOMContentLoaded', () => {
     const statNumbers = document.querySelectorAll('.stat-number');
@@ -239,6 +263,9 @@ document.addEventListener('DOMContentLoaded', () => {
     statNumbers.forEach(stat => {
         counterObserver.observe(stat);
     });
+    
+    // Initialize email obfuscation
+    setupEmailObfuscation();
 });
 
 // Image Modal/Lightbox functionality

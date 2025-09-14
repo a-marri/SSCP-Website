@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stanford Solar Car Project</title>
+    <title>Home - Stanford Solar Car Project</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;500;600;700&family=SF+Pro+Text:wght@300;400;500;600&display=swap" rel="stylesheet">
 </head>
@@ -15,25 +15,39 @@
                 <span class="logo-text">Stanford Solar Car Project</span>
             </div>
             <div class="nav-menu">
-                <a href="#about" class="nav-link">About</a>
-                <a href="#racing" class="nav-link">Racing</a>
-                <a href="#gallery" class="nav-link">Gallery</a>
-                <a href="#join" class="nav-link join-btn">Join Us</a>
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="team.html" class="nav-link">Team</a>
+                <a href="faculty.html" class="nav-link">Faculty Advisors</a>
+                <a href="sponsors.html" class="nav-link">Sponsors</a>
+                <a href="join.html" class="nav-link">How to Join</a>
+                <a href="contact.html" class="nav-link">Contact Us</a>
             </div>
+            <div class="mobile-menu-toggle" id="mobileMenuToggle">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </div>
+        </div>
+        <div class="mobile-nav-menu" id="mobileNavMenu">
+            <a href="index.html" class="mobile-nav-link">Home</a>
+            <a href="team.html" class="mobile-nav-link">Team</a>
+            <a href="faculty.html" class="mobile-nav-link">Faculty Advisors</a>
+            <a href="sponsors.html" class="mobile-nav-link">Sponsors</a>
+            <a href="join.html" class="mobile-nav-link">How to Join</a>
+            <a href="contact.html" class="mobile-nav-link">Contact Us</a>
         </div>
     </nav>
 
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-background">
-            <img src="images/1.jpg" alt="Stanford Solar Car" class="hero-bg-image">
+            <img src="images/fsgp7.jpeg" alt="Stanford Solar Car" class="hero-bg-image">
             <div class="hero-overlay"></div>
         </div>
         <div class="hero-content">
             <h1 class="hero-title"><span class="highlight">Solar Raycing.</span><br>Since 1989.</h1>
             <p class="hero-subtitle">Join Stanford's premier solar car team and push the boundaries of engineering and sustainable technology.</p>
             <div class="hero-buttons">
-                <a href="#join" class="btn-primary">Join Our Team</a>
                 <a href="#about" class="btn-secondary">Learn More</a>
             </div>
         </div>
@@ -78,7 +92,7 @@
                 <h2>Racing Excellence</h2>
                 <p>Competing at the highest level in international solar car competitions, including our recent 2nd place finish out of 30+ teams at the 2025 Formula Sun Grand Prix.</p>
                 <div class="racing-button-container">
-                    <a href="https://www.americansolarchallenge.org/the-competition/2025-formula-sun-grand-prix/?tab=laps-sov#results" target="_blank" class="btn-secondary">View Race Results</a>
+                    <a href="https://www.americansolarchallenge.org/the-competition/2025-formula-sun-grand-prix/?tab=laps-sov#results" target="_blank" class="btn-secondary">View FSGP25 Results</a>
                 </div>
             </div>
             <div class="racing-image">
@@ -114,49 +128,38 @@
         </div>
     </section>
 
-    <!-- Team Section -->
-    <section id="team" class="team section-fade">
+    <!-- Quick Links Section -->
+    <section class="quick-links section-fade">
         <div class="container">
-            <div class="team-content">
-                <div class="team-text">
-                    <h2>Join Our Team</h2>
-                    <p>We welcome students from all backgrounds and majors. There's a place for everyone to contribute their unique skills and passion.</p>
-                    <div class="team-roles">
-                        <div class="role">
-                            <h3>Aero</h3>
-                        </div>
-                        <div class="role">
-                            <h3>Battery</h3>
-                        </div>
-                        <div class="role">
-                            <h3>Business</h3>
-                        </div>
-                        <div class="role">
-                            <h3>Composites</h3>
-                        </div>
-                        <div class="role">
-                            <h3>Mechanical</h3>
-                        </div>
-                        <div class="role">
-                            <h3>Electrical</h3>
-                        </div>
-                        <div class="role">
-                            <h3>Array</h3>
-                        </div>
-                        <div class="role">
-                            <h3>Operations</h3>
-                        </div>
-                        <div class="role">
-                            <h3>Code</h3>
-                        </div>
-                        <div class="role">
-                            <h3>Strategy</h3>
-                        </div>
-                    </div>
-                </div>
-                <div class="team-image">
-                    <img src="images/fsgp1.jpeg" alt="Team Photo" class="team-img">
-                </div>
+            <div class="section-header">
+                <h2>Explore Our Project</h2>
+                <p>Discover more about our team, mission, and how you can get involved</p>
+            </div>
+            
+            <div class="links-grid">
+                <a href="team.html" class="link-card">
+                    <div class="link-icon">TEAM</div>
+                    <h3>Our Team</h3>
+                    <p>Meet the passionate students driving innovation in solar car technology</p>
+                </a>
+                
+                <a href="faculty.html" class="link-card">
+                    <div class="link-icon">FACULTY</div>
+                    <h3>Faculty Advisors</h3>
+                    <p>Expert guidance from Stanford's leading researchers and educators</p>
+                </a>
+                
+                <a href="sponsors.html" class="link-card">
+                    <div class="link-icon">SPONSORS</div>
+                    <h3>Our Sponsors</h3>
+                    <p>Sponsors that power innovation and sustainable technology</p>
+                </a>
+                
+                <a href="join.html" class="link-card">
+                    <div class="link-icon">JOIN</div>
+                    <h3>Join Us</h3>
+                    <p>Be part of the future of sustainable transportation</p>
+                </a>
             </div>
         </div>
     </section>
@@ -171,8 +174,8 @@
             <h2>Ready?</h2>
             <p>Join the Stanford Solar Car Project and be part of the future</p>
             <div class="join-buttons">
-                <a href="https://docs.google.com/forms/d/e/1FAIpQLSc839PzDu1kbfQXJCucLl1iy2lUjgSx7Cp1YgHADFqEoVlgHA/viewform?usp=dialog" class="btn-primary large" target="_blank">Join Our Team</a>
-                <a href="https://en.wikipedia.org/wiki/Stanford_Solar_Car_Project" class="btn-secondary large" target="_blank">Learn More</a>
+                <a href="join.html" class="btn-primary large">Join Our Team</a>
+                <a href="sponsors.html" class="btn-primary large">Support Us</a>
             </div>
         </div>
     </section>
@@ -185,7 +188,7 @@
                     <span class="logo-text">Stanford Solar Car Project</span>
                 </div>
                 <div class="footer-links">
-                    <a href="#" id="contact-email" class="footer-link" onclick="return false;">Contact</a>
+                    <a href="contact.html" class="footer-link">Contact</a>
                     <a href="https://www.instagram.com/stanfordsolarcar/?hl=en" class="footer-link" target="_blank">Instagram</a>
                     <a href="https://www.linkedin.com/company/stanfordsolarcar/posts/?feedView=all" class="footer-link" target="_blank">LinkedIn</a>
                 </div>

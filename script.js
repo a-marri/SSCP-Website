@@ -150,10 +150,68 @@ window.addEventListener('scroll', () => {
     }
 });
 
-// Mobile menu toggle (if needed in future)
+// Mobile menu toggle
 function toggleMobileMenu() {
-    const navMenu = document.querySelector('.nav-menu');
-    navMenu.classList.toggle('active');
+    const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+    const mobileNavMenu = document.getElementById('mobileNavMenu');
+    
+    if (mobileMenuToggle && mobileNavMenu) {
+        mobileMenuToggle.classList.toggle('active');
+        mobileNavMenu.classList.toggle('active');
+        
+        // Prevent body scroll when menu is open
+        if (mobileNavMenu.classList.contains('active')) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'auto';
+        }
+    }
+}
+
+// Initialize mobile menu functionality
+function initializeMobileMenu() {
+    const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+    const mobileNavMenu = document.getElementById('mobileNavMenu');
+    
+    if (mobileMenuToggle) {
+        mobileMenuToggle.addEventListener('click', toggleMobileMenu);
+    }
+    
+    // Close mobile menu when clicking on a link
+    if (mobileNavMenu) {
+        const mobileNavLinks = mobileNavMenu.querySelectorAll('.mobile-nav-link');
+        mobileNavLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenuToggle.classList.remove('active');
+                mobileNavMenu.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            });
+        });
+    }
+    
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', (e) => {
+        if (mobileNavMenu && mobileNavMenu.classList.contains('active')) {
+            if (!mobileMenuToggle.contains(e.target) && !mobileNavMenu.contains(e.target)) {
+                mobileMenuToggle.classList.remove('active');
+                mobileNavMenu.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        }
+    });
+    
+    // Close mobile menu on window resize to desktop
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 768) {
+            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+            const mobileNavMenu = document.getElementById('mobileNavMenu');
+            if (mobileMenuToggle && mobileNavMenu) {
+                mobileMenuToggle.classList.remove('active');
+                mobileNavMenu.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        }
+    });
 }
 
 // Add click handlers for CTA buttons
@@ -236,6 +294,57 @@ function setupEmailObfuscation() {
     }
 }
 
+// Contact Form Handling
+function initializeContactForm() {
+    const contactForm = document.getElementById('contactForm');
+    if (!contactForm) return;
+    
+    // Initialize EmailJS
+    emailjs.init('_2pQemnsgKZkkc0fx');
+    
+    contactForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Get form data
+        const formData = new FormData(contactForm);
+        const data = Object.fromEntries(formData);
+        
+        // Basic validation
+        if (!data.firstName || !data.lastName || !data.email || !data.subject || !data.message) {
+            alert('Please fill in all required fields.');
+            return;
+        }
+        
+        // Show loading state
+        const submitBtn = contactForm.querySelector('button[type="submit"]');
+        const originalText = submitBtn.textContent;
+        submitBtn.textContent = 'Sending...';
+        submitBtn.disabled = true;
+        
+        // Prepare template parameters
+        const templateParams = {
+            name: `${data.firstName} ${data.lastName}`,
+            email: data.email,
+            subject: data.subject,
+            message: data.message
+        };
+        
+        // Send email using EmailJS
+        emailjs.send('service_9b2he4e', 'template_gvdticu', templateParams)
+            .then(function(response) {
+                alert('Thank you for your message! We\'ll get back to you soon.');
+                contactForm.reset();
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }, function(error) {
+                alert('Sorry, there was an error sending your message. Please try again or contact us directly.');
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+                console.error('EmailJS error:', error);
+            });
+    });
+}
+
 // Initialize counter animations
 document.addEventListener('DOMContentLoaded', () => {
     const statNumbers = document.querySelectorAll('.stat-number');
@@ -267,8 +376,16 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize email obfuscation
     setupEmailObfuscation();
     
-    // Initialize dynamic gallery
-    initializeDynamicGallery();
+    // Initialize dynamic gallery (only on pages that have it)
+    if (document.getElementById('galleryGrid')) {
+        initializeDynamicGallery();
+    }
+    
+    // Initialize contact form (only on contact page)
+    initializeContactForm();
+    
+    // Initialize mobile menu
+    initializeMobileMenu();
 });
 
 // Image Modal/Lightbox functionality

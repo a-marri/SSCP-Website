@@ -17,7 +17,7 @@
             <div class="nav-menu">
                 <a href="index.html" class="nav-link">Home</a>
                 <a href="team.html" class="nav-link">Team</a>
-                <a href="faculty.html" class="nav-link">Faculty Advisors</a>
+                <a href="faculty.html" class="nav-link">Advisory Boards</a>
                 <a href="sponsors.html" class="nav-link">Sponsors</a>
                 <a href="join.html" class="nav-link">How to Join</a>
                 <a href="contact.html" class="nav-link">Contact Us</a>
@@ -31,7 +31,7 @@
         <div class="mobile-nav-menu" id="mobileNavMenu">
             <a href="index.html" class="mobile-nav-link">Home</a>
             <a href="team.html" class="mobile-nav-link">Team</a>
-            <a href="faculty.html" class="mobile-nav-link">Faculty Advisors</a>
+            <a href="faculty.html" class="mobile-nav-link">Advisory Boards</a>
             <a href="sponsors.html" class="mobile-nav-link">Sponsors</a>
             <a href="join.html" class="mobile-nav-link">How to Join</a>
             <a href="contact.html" class="mobile-nav-link">Contact Us</a>
@@ -76,10 +76,12 @@
                     </div>
                 </div>
                 <div class="about-image">
-                    <video id="scrollVideo" class="about-video" muted playsinline preload="auto">
-                        <source src="images/DJI 0138.mp4" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
+                    <div id="imageSequence" class="image-sequence">
+                        <img id="sequenceImage" class="about-video" src="images/fsgp7.jpeg" alt="Solar Car Team" />
+                        <video id="hiddenVideo" style="display: none;" muted playsinline preload="metadata">
+                            <source src="images/DJI 0138.mp4" type="video/mp4">
+                        </video>
+                    </div>
                 </div>
             </div>
         </div>
@@ -110,7 +112,7 @@
     </section>
 
     <!-- Gallery Section -->
-    <section id="gallery" class="gallery">
+    <section id="gallery" class="gallery hidden">
         <div class="container">
             <div class="section-header">
                 <h2>Race Gallery</h2>
@@ -145,7 +147,7 @@
                 
                 <a href="faculty.html" class="link-card">
                     <div class="link-icon">FACULTY</div>
-                    <h3>Faculty Advisors</h3>
+                    <h3>Advisory Boards</h3>
                     <p>Expert guidance from Stanford's leading researchers and educators</p>
                 </a>
                 

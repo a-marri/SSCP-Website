@@ -311,23 +311,25 @@ body {
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
 }
 
-.about-video {
+.image-sequence {
+    position: relative;
     width: 100%;
     height: 500px;
-    object-fit: cover;
+    overflow: hidden;
     border-radius: 20px;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
     background: #000;
-    /* Performance optimizations */
-    will-change: transform;
-    transform: translateZ(0); /* Force hardware acceleration */
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-    /* Smooth video seeking */
-    image-rendering: optimizeSpeed;
-    image-rendering: -moz-crisp-edges;
-    image-rendering: -webkit-optimize-contrast;
-    image-rendering: optimize-contrast;
+}
+
+.about-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 20px;
+    transition: opacity 0.3s ease;
+    /* Simple performance optimization */
+    will-change: auto;
+    transform: translateZ(0);
 }
 
 /* Racing Section */
@@ -497,6 +499,10 @@ body {
 
 .gallery-grid.hidden {
     display: none;
+}
+
+.hidden {
+    display: none !important;
 }
 
 .gallery-grid.expanded {
@@ -1238,7 +1244,7 @@ body {
 }
 
 /* Page-specific Hero Sections */
-.team-hero, .faculty-hero, .sponsors-hero, .join-hero, .contact-hero {
+.team-hero, .advisory-hero, .sponsors-hero, .join-hero, .contact-hero {
     height: 60vh;
     position: relative;
     display: flex;
@@ -1247,7 +1253,7 @@ body {
     overflow: hidden;
 }
 
-.team-hero-background, .faculty-hero-background, .sponsors-hero-background, .join-hero-background, .contact-hero-background {
+.team-hero-background, .advisory-hero-background, .sponsors-hero-background, .join-hero-background, .contact-hero-background {
     position: absolute;
     top: 0;
     left: 0;
@@ -1256,14 +1262,14 @@ body {
     z-index: 1;
 }
 
-.team-hero-bg-image, .faculty-hero-bg-image, .sponsors-hero-bg-image, .join-hero-bg-image, .contact-hero-bg-image {
+.team-hero-bg-image, .advisory-hero-bg-image, .sponsors-hero-bg-image, .join-hero-bg-image, .contact-hero-bg-image {
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: center bottom;
 }
 
-.team-hero-overlay, .faculty-hero-overlay, .sponsors-hero-overlay, .join-hero-overlay, .contact-hero-overlay {
+.team-hero-overlay, .advisory-hero-overlay, .sponsors-hero-overlay, .join-hero-overlay, .contact-hero-overlay {
     position: absolute;
     top: 0;
     left: 0;
@@ -1272,7 +1278,7 @@ body {
     background: linear-gradient(135deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.4) 50%, rgba(0, 0, 0, 0.2) 100%);
 }
 
-.team-hero-content, .faculty-hero-content, .sponsors-hero-content, .join-hero-content, .contact-hero-content {
+.team-hero-content, .advisory-hero-content, .sponsors-hero-content, .join-hero-content, .contact-hero-content {
     position: relative;
     z-index: 2;
     text-align: center;
@@ -1281,7 +1287,7 @@ body {
     padding: 0 20px;
 }
 
-.team-hero-title, .faculty-hero-title, .sponsors-hero-title, .join-hero-title, .contact-hero-title {
+.team-hero-title, .advisory-hero-title, .sponsors-hero-title, .join-hero-title, .contact-hero-title {
     font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 3.5rem;
     font-weight: 700;
@@ -1290,7 +1296,7 @@ body {
     line-height: 1.1;
 }
 
-.team-hero-subtitle, .faculty-hero-subtitle, .sponsors-hero-subtitle, .join-hero-subtitle, .contact-hero-subtitle {
+.team-hero-subtitle, .advisory-hero-subtitle, .sponsors-hero-subtitle, .join-hero-subtitle, .contact-hero-subtitle {
     font-size: 1.25rem;
     font-weight: 400;
     opacity: 0.9;
@@ -1299,7 +1305,7 @@ body {
 
 /* Team Page Styles */
 .team-structure {
-    padding-top: 6rem;
+    padding: 6rem 0 8rem 0;
 }
 
 .team-roles-grid {
@@ -1491,7 +1497,7 @@ body {
 }
 
 /* Faculty Page Styles */
-.faculty-advisors {
+.advisory-board {
     padding: 6rem 0;
 }
 
@@ -1552,7 +1558,7 @@ body {
 
 /* Responsive faculty cards */
 @media (max-width: 768px) {
-    .faculty-advisors {
+    .advisory-board {
         padding: 4rem 0;
     }
     
@@ -1593,7 +1599,7 @@ body {
     color: #8B0000;
     font-weight: 500;
     font-size: 1.1rem;
-    margin-bottom: 0;
+    margin-bottom: 0.5rem;
 }
 
 .faculty-department {
@@ -1613,11 +1619,78 @@ body {
     line-height: 1.6;
 }
 
+/* Advisory Board Styles */
+.advisory-board {
+    padding: 6rem 0;
+    background: #f5f5f7;
+}
+
+.advisory-board:nth-child(even) {
+    background: #ffffff;
+}
+
+.section-title {
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #1d1d1f;
+    text-align: center;
+    margin-bottom: 3rem;
+    letter-spacing: -0.02em;
+}
+
 .advisory-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    display: flex;
+    flex-wrap: wrap;
     gap: 2rem;
     margin-top: 3rem;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: center;
+    align-items: stretch;
+}
+
+.advisory-member {
+    background: white;
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    min-height: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex: 0 0 calc(33.333% - 1.33rem);
+    min-width: 300px;
+    max-width: 350px;
+}
+
+.advisory-member:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.advisory-member h4 {
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1d1d1f;
+    margin-bottom: 0.75rem;
+    line-height: 1.3;
+}
+
+.advisory-member p {
+    color: #8B0000;
+    font-weight: 500;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    margin: 0;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .advisory-card {
@@ -1658,6 +1731,11 @@ body {
     align-items: center;
 }
 
+.sponsor-grid.premier {
+    gap: 6rem;
+    margin-bottom: 2rem;
+}
+
 .sponsor-card {
     background: white;
     padding: 1.5rem;
@@ -1675,12 +1753,26 @@ body {
     transform: translateY(-5px);
 }
 
+.sponsor-card.premier:hover {
+    transform: scale(1.25) translateY(-5px);
+}
+
 .sponsor-card.premier {
-    border: 3px solid #8B0000;
+    border: 4px solid #8B0000;
+    padding: 3.5rem;
+    min-height: 220px;
+    transform: scale(1.25);
+    z-index: 2;
+    position: relative;
 }
 
 .sponsor-card.diamond {
     border: 3px solid #B9F2FF;
+    padding: 2.25rem;
+    min-height: 160px;
+    transform: scale(1.05);
+    z-index: 1;
+    position: relative;
 }
 
 .sponsor-card.platinum {
@@ -1705,6 +1797,26 @@ body {
     align-items: center;
     justify-content: center;
     margin-bottom: 0.75rem;
+}
+
+.sponsor-card.premier .sponsor-logo {
+    height: 120px;
+    margin-bottom: 1.25rem;
+}
+
+.sponsor-card.diamond .sponsor-logo {
+    height: 80px;
+    margin-bottom: 0.875rem;
+}
+
+.sponsor-card.premier h3 {
+    font-size: 1.6rem;
+    font-weight: 600;
+}
+
+.sponsor-card.diamond h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
 }
 
 .sponsor-placeholder {
@@ -2313,6 +2425,12 @@ body {
         gap: 15px;
         max-width: 800px;
     }
+    
+    .advisory-member {
+        flex: 0 0 calc(50% - 1rem);
+        min-width: 280px;
+        max-width: 320px;
+    }
 }
 
 /* Temporary: Show mobile menu on all screen sizes for testing */
@@ -2476,7 +2594,7 @@ body {
     }
     
     /* New page responsive styles */
-    .team-hero-title, .faculty-hero-title, .sponsors-hero-title, .join-hero-title, .contact-hero-title {
+    .team-hero-title, .advisory-hero-title, .sponsors-hero-title, .join-hero-title, .contact-hero-title {
         font-size: 2.5rem;
     }
     
@@ -2493,9 +2611,34 @@ body {
         margin-top: 2rem;
     }
     
+    .sponsor-grid.premier {
+        gap: 4rem;
+        margin-bottom: 1.5rem;
+    }
+    
     .sponsor-card {
         padding: 1.25rem;
         min-height: 100px;
+    }
+    
+    .sponsor-card.premier {
+        padding: 2.5rem;
+        min-height: 180px;
+        transform: scale(1.15);
+    }
+    
+    .sponsor-card.diamond {
+        padding: 1.75rem;
+        min-height: 130px;
+        transform: scale(1.02);
+    }
+    
+    .sponsor-card.premier .sponsor-logo {
+        height: 90px;
+    }
+    
+    .sponsor-card.diamond .sponsor-logo {
+        height: 65px;
     }
     
     .form-row {
@@ -2504,6 +2647,24 @@ body {
     
     .join-cta-content h2, .contact-faculty-content h2, .become-sponsor-content h2, .application-cta-content h2 {
         font-size: 2rem;
+    }
+    
+    .section-title {
+        font-size: 2rem;
+    }
+    
+    .advisory-grid {
+        flex-direction: column;
+        align-items: center;
+        gap: 1.5rem;
+    }
+    
+    .advisory-member {
+        padding: 1.5rem;
+        flex: none;
+        width: 100%;
+        max-width: 400px;
+        min-width: auto;
     }
 }
 
@@ -2563,12 +2724,26 @@ body {
 
 .about-section {
     padding: 5rem 0;
-    background: white;
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+    position: relative;
+}
+
+.about-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100px;
+    background: linear-gradient(180deg, rgba(139, 0, 0, 0.05) 0%, transparent 100%);
+    z-index: 1;
 }
 
 .about-content {
     max-width: 800px;
     margin: 0 auto;
+    position: relative;
+    z-index: 2;
 }
 
 .about-content p {

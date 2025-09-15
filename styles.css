@@ -54,6 +54,16 @@ body {
     letter-spacing: -0.01em;
 }
 
+/* remove underline when used as a link */
+.logo-text,
+.logo-text:link,
+.logo-text:visited,
+.logo-text:hover,
+.logo-text:active {
+    text-decoration: none;
+    color: #ffffff;
+}
+
 .team-number {
     color: #8B0000;
     font-weight: 700;
@@ -1180,15 +1190,15 @@ body {
 }
 
 .mobile-nav-menu {
-    position: absolute;
-    top: 100%;
+    position: fixed;
+    top: 60px;
     left: 0;
     right: 0;
     background: rgba(0, 0, 0, 0.98);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-top: 1px solid rgba(255, 255, 255, 0.1);
-    z-index: 1000;
+    z-index: 1100;
     padding: 20px 0;
     transform: translateY(-100%);
     opacity: 0;

@@ -169,16 +169,21 @@ window.addEventListener('scroll', () => {
 });
 
 // Mobile menu toggle
-function toggleMobileMenu() {
+function toggleMobileMenu(event) {
     const mobileMenuToggle = document.getElementById('mobileMenuToggle');
     const mobileNavMenu = document.getElementById('mobileNavMenu');
     
     if (mobileMenuToggle && mobileNavMenu) {
+        if (event && typeof event.stopPropagation === 'function') {
+            event.stopPropagation();
+        }
         mobileMenuToggle.classList.toggle('active');
         mobileNavMenu.classList.toggle('active');
+        const isActive = mobileNavMenu.classList.contains('active');
+        mobileMenuToggle.setAttribute('aria-expanded', isActive ? 'true' : 'false');
         
         // Prevent body scroll when menu is open
-        if (mobileNavMenu.classList.contains('active')) {
+        if (isActive) {
             document.body.style.overflow = 'hidden';
         } else {
             document.body.style.overflow = 'auto';
@@ -191,8 +196,19 @@ function initializeMobileMenu() {
     const mobileMenuToggle = document.getElementById('mobileMenuToggle');
     const mobileNavMenu = document.getElementById('mobileNavMenu');
     
-    if (mobileMenuToggle) {
-        mobileMenuToggle.addEventListener('click', toggleMobileMenu);
+    if (mobileMenuToggle && !mobileMenuToggle.dataset.mobileMenuInitialized) {
+        mobileMenuToggle.setAttribute('role', 'button');
+        mobileMenuToggle.setAttribute('tabindex', '0');
+        mobileMenuToggle.setAttribute('aria-controls', 'mobileNavMenu');
+        mobileMenuToggle.setAttribute('aria-expanded', 'false');
+        mobileMenuToggle.addEventListener('click', (e) => toggleMobileMenu(e));
+        mobileMenuToggle.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                toggleMobileMenu(e);
+            }
+        });
+        mobileMenuToggle.dataset.mobileMenuInitialized = 'true';
     }
     
     // Close mobile menu when clicking on a link
@@ -207,30 +223,58 @@ function initializeMobileMenu() {
         });
     }
     
-    // Close mobile menu when clicking outside
-    document.addEventListener('click', (e) => {
-        if (mobileNavMenu && mobileNavMenu.classList.contains('active')) {
-            if (!mobileMenuToggle.contains(e.target) && !mobileNavMenu.contains(e.target)) {
-                mobileMenuToggle.classList.remove('active');
-                mobileNavMenu.classList.remove('active');
-                document.body.style.overflow = 'auto';
+    // Close mobile menu when clicking outside (attach once)
+    if (!window.__mobileMenuOutsideClickHandlerAdded) {
+        document.addEventListener('click', (e) => {
+            const toggleEl = document.getElementById('mobileMenuToggle');
+            const menuEl = document.getElementById('mobileNavMenu');
+            if (menuEl && menuEl.classList.contains('active')) {
+                if (!toggleEl.contains(e.target) && !menuEl.contains(e.target)) {
+                    toggleEl.classList.remove('active');
+                    menuEl.classList.remove('active');
+                    document.body.style.overflow = 'auto';
+                    toggleEl.setAttribute('aria-expanded', 'false');
+                }
             }
-        }
-    });
+        });
+        window.__mobileMenuOutsideClickHandlerAdded = true;
+    }
     
-    // Close mobile menu on window resize to desktop
-    window.addEventListener('resize', () => {
-        if (window.innerWidth > 768) {
-            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
-            const mobileNavMenu = document.getElementById('mobileNavMenu');
-            if (mobileMenuToggle && mobileNavMenu) {
-                mobileMenuToggle.classList.remove('active');
-                mobileNavMenu.classList.remove('active');
-                document.body.style.overflow = 'auto';
+    // Close mobile menu on window resize to desktop (attach once)
+    if (!window.__mobileMenuResizeHandlerAdded) {
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768) {
+                const toggleEl = document.getElementById('mobileMenuToggle');
+                const menuEl = document.getElementById('mobileNavMenu');
+                if (toggleEl && menuEl) {
+                    toggleEl.classList.remove('active');
+                    menuEl.classList.remove('active');
+                    document.body.style.overflow = 'auto';
+                    toggleEl.setAttribute('aria-expanded', 'false');
+                }
             }
-        }
-    });
+        });
+        window.__mobileMenuResizeHandlerAdded = true;
+    }
 }
+
+// Fallback: ensure mobile menu is initialized after full load as well
+window.addEventListener('load', () => {
+    try {
+        initializeMobileMenu();
+    } catch (e) {
+        console.error('Failed to initialize mobile menu on load', e);
+    }
+});
+
+// Independent DOM ready hook to ensure mobile menu is initialized even if other init code fails
+document.addEventListener('DOMContentLoaded', () => {
+    try {
+        initializeMobileMenu();
+    } catch (e) {
+        console.error('Failed to initialize mobile menu on DOMContentLoaded', e);
+    }
+});
 
 // Add click handlers for CTA buttons
 document.querySelectorAll('.btn-primary').forEach(button => {
@@ -367,8 +411,10 @@ document.addEventListener('DOMContentLoaded', () => {
         counterObserver.observe(stat);
     });
     
-    // Initialize email obfuscation
-    setupEmailObfuscation();
+    // Initialize email obfuscation (guard if not defined)
+    if (typeof setupEmailObfuscation === 'function') {
+        setupEmailObfuscation();
+    }
     
     // Initialize dynamic gallery (only on pages that have it)
     if (document.getElementById('galleryGrid')) {

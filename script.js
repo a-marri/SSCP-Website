@@ -288,30 +288,6 @@ function animateCounter(element, target, suffix = '', duration = 2000) {
     }, 16);
 }
 
-// Email obfuscation function
-function setupEmailObfuscation() {
-    const contactLink = document.getElementById('contact-email');
-    if (contactLink) {
-        contactLink.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            // Split email into parts to obfuscate
-            const emailParts = [
-                'contactsolarcar',
-                '@',
-                'lists',
-                '.',
-                'stanford',
-                '.',
-                'edu'
-            ];
-            
-            const email = emailParts.join('');
-            window.location.href = 'mailto:' + email;
-        });
-    }
-}
-
 // Contact Form Handling
 function initializeContactForm() {
     const contactForm = document.getElementById('contactForm');

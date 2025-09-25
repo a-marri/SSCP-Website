@@ -4,44 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home - Stanford Solar Car Project</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;500;600;700&family=SF+Pro+Text:wght@300;400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-logo">
-                <a href="index.html" class="logo-text">Stanford Solar Car Project</a><span class="team-number">16</span>
-            </div>
-            <div class="nav-menu">
-                <a href="index.html" class="nav-link">Home</a>
-                <a href="team.html" class="nav-link">Team</a>
-                <a href="faculty.html" class="nav-link">Advisory Boards</a>
-                <a href="sponsors.html" class="nav-link">Sponsors</a>
-                <a href="join.html" class="nav-link">How to Join</a>
-                <a href="contact.html" class="nav-link">Contact Us</a>
-            </div>
-            <div class="mobile-menu-toggle" id="mobileMenuToggle">
-                <span class="hamburger-line"></span>
-                <span class="hamburger-line"></span>
-                <span class="hamburger-line"></span>
-            </div>
-        </div>
-        <div class="mobile-nav-menu" id="mobileNavMenu">
-            <a href="index.html" class="mobile-nav-link">Home</a>
-            <a href="team.html" class="mobile-nav-link">Team</a>
-            <a href="faculty.html" class="mobile-nav-link">Advisory Boards</a>
-            <a href="sponsors.html" class="mobile-nav-link">Sponsors</a>
-            <a href="join.html" class="mobile-nav-link">How to Join</a>
-            <a href="contact.html" class="mobile-nav-link">Contact Us</a>
-        </div>
-    </nav>
+    <!-- Navigation Container -->
+    <div id="navigation-container"></div>
 
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-background">
-            <img src="images/fsgp7.jpeg" alt="Stanford Solar Car" class="hero-bg-image">
+            <img src="assets/images/race-photos/fsgp7.jpeg" alt="Stanford Solar Car" class="hero-bg-image">
             <div class="hero-overlay"></div>
         </div>
         <div class="hero-content">
@@ -66,10 +39,6 @@
                             <span class="stat-label">Years Racing</span>
                         </div>
                         <div class="stat-item">
-                            <span class="stat-number" data-target="500" data-suffix="+">0</span>
-                            <span class="stat-label">of Alumni</span>
-                        </div>
-                        <div class="stat-item">
                             <span class="stat-number" data-target="10000" data-suffix="+">0</span>
                             <span class="stat-label">of Miles Raced</span>
                         </div>
@@ -77,9 +46,9 @@
                 </div>
                 <div class="about-image">
                     <div id="imageSequence" class="image-sequence">
-                        <img id="sequenceImage" class="about-video" src="images/fsgp7.jpeg" alt="Solar Car Team" />
+                        <img id="sequenceImage" class="about-video" src="assets/images/race-photos/fsgp7.jpeg" alt="Solar Car Team" />
                         <video id="hiddenVideo" style="display: none;" muted playsinline preload="metadata">
-                            <source src="images/DJI 0138.mp4" type="video/mp4">
+                            <source src="assets/images/race-photos/DJI 0138.mp4" type="video/mp4">
                         </video>
                     </div>
                 </div>
@@ -98,7 +67,7 @@
                 </div>
             </div>
             <div class="racing-image">
-                <img src="images/17.jpg" alt="Solar Car Racing" class="racing-img">
+                <img src="assets/images/race-photos/17.jpg" alt="Solar Car Racing" class="racing-img">
             </div>
         </div>
         <div class="racing-video-container">
@@ -139,25 +108,25 @@
             </div>
             
             <div class="links-grid">
-                <a href="team.html" class="link-card">
+                <a href="pages/team.html" class="link-card">
                     <div class="link-icon">TEAM</div>
                     <h3>Our Team</h3>
                     <p>Meet the passionate students driving innovation in solar car technology</p>
                 </a>
                 
-                <a href="faculty.html" class="link-card">
+                <a href="pages/faculty.html" class="link-card">
                     <div class="link-icon">FACULTY</div>
                     <h3>Advisory Boards</h3>
                     <p>Expert guidance from Stanford's leading researchers and educators</p>
                 </a>
                 
-                <a href="sponsors.html" class="link-card">
+                <a href="pages/sponsors.html" class="link-card">
                     <div class="link-icon">SPONSORS</div>
                     <h3>Our Sponsors</h3>
                     <p>Sponsors that power innovation and sustainable technology</p>
                 </a>
                 
-                <a href="join.html" class="link-card">
+                <a href="pages/join.html" class="link-card">
                     <div class="link-icon">JOIN</div>
                     <h3>Join Us</h3>
                     <p>Be part of the future of sustainable transportation</p>
@@ -169,34 +138,21 @@
     <!-- Join Section -->
     <section id="join" class="join section-fade">
         <div class="join-background">
-            <img src="images/fsgp2.jpeg" alt="Team Working" class="join-bg-image">
+            <img src="assets/images/race-photos/fsgp2.jpeg" alt="Team Working" class="join-bg-image">
             <div class="join-overlay"></div>
         </div>
         <div class="join-content">
             <h2>Ready?</h2>
             <p>Join the Stanford Solar Car Project and be part of the future</p>
             <div class="join-buttons">
-                <a href="join.html" class="btn-primary large">Join Our Team</a>
-                <a href="sponsors.html" class="btn-primary large">Support Us</a>
+                <a href="pages/join.html" class="btn-primary large">Join Our Team</a>
+                <a href="pages/sponsors.html" class="btn-primary large">Support Us</a>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-logo">
-                    <span class="logo-text">Stanford Solar Car Project<span class="team-number">16</span></span>
-                </div>
-                <div class="footer-links">
-                    <a href="contact.html" class="footer-link">Contact</a>
-                    <a href="https://www.instagram.com/stanfordsolarcar/?hl=en" class="footer-link" target="_blank">Instagram</a>
-                    <a href="https://www.linkedin.com/company/stanfordsolarcar/posts/?feedView=all" class="footer-link" target="_blank">LinkedIn</a>
-                </div>
-            </div>
-        </div>
-    </footer>
+    <!-- Footer Container -->
+    <div id="footer-container"></div>
 
     <!-- Image Modal/Lightbox -->
     <div id="imageModal" class="modal">
@@ -210,6 +166,7 @@
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <script src="assets/js/component-loader.js"></script>
+    <script src="assets/js/script.js"></script>
 </body>
 </html>

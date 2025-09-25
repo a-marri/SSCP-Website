@@ -4,44 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Team - Stanford Solar Car Project</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="../assets/css/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;500;600;700&family=SF+Pro+Text:wght@300;400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-logo">
-                <a href="index.html" class="logo-text">Stanford Solar Car Project</a><span class="team-number">16</span>
-            </div>
-            <div class="nav-menu">
-                <a href="index.html" class="nav-link">Home</a>
-                <a href="team.html" class="nav-link active">Team</a>
-                <a href="faculty.html" class="nav-link">Advisory Boards</a>
-                <a href="sponsors.html" class="nav-link">Sponsors</a>
-                <a href="join.html" class="nav-link">How to Join</a>
-                <a href="contact.html" class="nav-link">Contact Us</a>
-            </div>
-            <div class="mobile-menu-toggle" id="mobileMenuToggle">
-                <span class="hamburger-line"></span>
-                <span class="hamburger-line"></span>
-                <span class="hamburger-line"></span>
-            </div>
-        </div>
-        <div class="mobile-nav-menu" id="mobileNavMenu">
-            <a href="index.html" class="mobile-nav-link">Home</a>
-            <a href="team.html" class="mobile-nav-link active">Team</a>
-            <a href="faculty.html" class="mobile-nav-link">Advisory Boards</a>
-            <a href="sponsors.html" class="mobile-nav-link">Sponsors</a>
-            <a href="join.html" class="mobile-nav-link">How to Join</a>
-            <a href="contact.html" class="mobile-nav-link">Contact Us</a>
-        </div>
-    </nav>
+    <!-- Navigation Container -->
+    <div id="navigation-container"></div>
 
     <!-- Team Hero Section -->
     <section class="team-hero">
         <div class="team-hero-background">
-            <img src="images/13.jpg" alt="Team Photo" class="team-hero-bg-image">
+            <img src="../assets/images/race-photos/13.jpg" alt="Team Photo" class="team-hero-bg-image">
             <div class="team-hero-overlay"></div>
         </div>
         <div class="team-hero-content">
@@ -74,119 +47,99 @@
         <div class="container">
             <div class="section-header">
                 <h2>Meet Our Members</h2>
-                <p>Our team consists of dedicated students from various majors, united by our passion for sustainable technology.</p>
+                <p>Our team consists of dedicated students from various majors, united by our passion.</p>
             </div>
             
             <div class="members-grid">
                 <div class="member-card">
                     <div class="member-photo">
-                        <img src="images/fsgp2.jpeg" alt="Team Member" class="member-img">
+                        <img src="../assets/images/team/akhil.jpg" alt="Akhil Marri" class="member-img">
                     </div>
                     <div class="member-info">
+                        <p class="member-name">Akhil Marri</p>
                         <h3>President</h3>
-                        <p class="member-name">[Name Placeholder]</p>
                     </div>
                 </div>
                 
                 <div class="member-card">
                     <div class="member-photo">
-                        <img src="images/fsgp3.jpeg" alt="Team Member" class="member-img">
+                        <img src="../assets/images/team/panos.jpg" alt="Panos Papanastasiou" class="member-img">
                     </div>
                     <div class="member-info">
-                        <h3>Vice President</h3>
-                        <p class="member-name">[Name Placeholder]</p>
+                        <p class="member-name">Panos Papanastasiou</p>
+                        <h3>Vice President & Mech Lead</h3>
                     </div>
                 </div>
                 
                 <div class="member-card">
                     <div class="member-photo">
-                        <img src="images/fsgp4.jpeg" alt="Team Member" class="member-img">
+                        <img src="../assets/images/race-photos/fsgp4.jpeg" alt="Team Member" class="member-img">
                     </div>
                     <div class="member-info">
+                        <p class="member-name">Josh Koch</p>
                         <h3>Chief Financial Officer</h3>
-                        <p class="member-name">[Name Placeholder]</p>
                     </div>
                 </div>
                 
                 <div class="member-card">
                     <div class="member-photo">
-                        <img src="images/fsgp5.jpeg" alt="Team Member" class="member-img">
+                        <img src="../assets/images/team/joseph.jpg" alt="Joeseph Garcia" class="member-img">
                     </div>
                     <div class="member-info">
+                        <p class="member-name">Joeseph Garcia</p>
                         <h3>Chief Safety Officer</h3>
-                        <p class="member-name">[Name Placeholder]</p>
                     </div>
                 </div>
                 
-                <div class="member-card">
-                    <div class="member-photo">
-                        <img src="images/fsgp6.jpeg" alt="Team Member" class="member-img">
-                    </div>
-                    <div class="member-info">
-                        <h3>Mechanical Lead</h3>
-                        <p class="member-name">[Name Placeholder]</p>
-                    </div>
-                </div>
+                <!-- Removed standalone Mechanical Lead card as it's combined with Vice President -->
                 
                 <div class="member-card">
                     <div class="member-photo">
-                        <img src="images/fsgp7.jpeg" alt="Team Member" class="member-img">
+                        <img src="../assets/images/race-photos/fsgp7.jpeg" alt="Team Member" class="member-img">
                     </div>
                     <div class="member-info">
+                        <p class="member-name">Edward Mu</p>
                         <h3>Electrical Lead</h3>
-                        <p class="member-name">[Name Placeholder]</p>
                     </div>
                 </div>
                 
                 <div class="member-card">
                     <div class="member-photo">
-                        <img src="images/fsgp8.jpeg" alt="Team Member" class="member-img">
+                        <img src="../assets/images/team/calvin.jpeg" alt="Calvin Yeh" class="member-img">
                     </div>
                     <div class="member-info">
+                        <p class="member-name">Calvin Yeh</p>
                         <h3>Battery Lead</h3>
-                        <p class="member-name">[Name Placeholder]</p>
                     </div>
                 </div>
                 
                 <div class="member-card">
                     <div class="member-photo">
-                        <img src="images/fsgp9.jpeg" alt="Team Member" class="member-img">
+                        <img src="../assets/images/team/sofie.jpg" alt="Sofie Roux" class="member-img">
                     </div>
                     <div class="member-info">
+                        <p class="member-name">Sofie Roux</p>
                         <h3>Array Lead</h3>
-                        <p class="member-name">[Name Placeholder]</p>
                     </div>
                 </div>
                 
                 <div class="member-card">
                     <div class="member-photo">
-                        <img src="images/fsgp10.jpg" alt="Team Member" class="member-img">
+                        <img src="../assets/images/team/allen.png" alt="Allen Weng" class="member-img">
                     </div>
                     <div class="member-info">
+                        <p class="member-name">Allen Weng</p>
                         <h3>Code Lead</h3>
-                        <p class="member-name">[Name Placeholder]</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-logo">
-                    <span class="logo-text">Stanford Solar Car Project<span class="team-number">16</span></span>
-                </div>
-                <div class="footer-links">
-                    <a href="contact.html" class="footer-link">Contact</a>
-                    <a href="https://www.instagram.com/stanfordsolarcar/?hl=en" class="footer-link" target="_blank">Instagram</a>
-                    <a href="https://www.linkedin.com/company/stanfordsolarcar/posts/?feedView=all" class="footer-link" target="_blank">LinkedIn</a>
-                </div>
-            </div>
-        </div>
-    </footer>
+    <!-- Footer Container -->
+    <div id="footer-container"></div>
 
-    <script src="script.js"></script>
+    <script src="../assets/js/component-loader.js"></script>
+    <script src="../assets/js/script.js"></script>
 </body>
 </html>

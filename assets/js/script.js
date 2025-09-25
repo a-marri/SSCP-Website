@@ -38,8 +38,8 @@ const sectionObserver = new IntersectionObserver((entries) => {
         if (entry.isIntersecting && ratio > 0.1) {
             section.classList.add('visible');
             
-            // Add staggered animation to child elements
-            const animatedElements = section.querySelectorAll('.about-card, .stat-item, .role-card, .gallery-item');
+            // Add staggered animation to child elements (excluding stat-item to prevent conflicts with counter animation)
+            const animatedElements = section.querySelectorAll('.about-card, .role-card, .gallery-item');
             animatedElements.forEach((el, index) => {
                 el.style.opacity = '0';
                 el.style.transform = 'translateY(30px)';
@@ -62,8 +62,8 @@ document.addEventListener('DOMContentLoaded', () => {
         sectionObserver.observe(section);
     });
     
-    // Animate individual elements within sections (excluding gallery items)
-    const animatedElements = document.querySelectorAll('.about-card, .stat, .role-card');
+    // Animate individual elements within sections (excluding gallery items and stat elements to prevent conflicts with counter animation)
+    const animatedElements = document.querySelectorAll('.about-card, .role-card');
     
     animatedElements.forEach(el => {
         el.style.opacity = '0';
@@ -309,6 +309,19 @@ document.addEventListener('DOMContentLoaded', lazyLoadImages);
 
 // Counter animation for statistics
 function animateCounter(element, target, suffix = '', duration = 2000) {
+    // Prevent multiple animations on the same element
+    if (element.dataset.animating === 'true') {
+        return;
+    }
+    
+    element.dataset.animating = 'true';
+    
+    // Ensure element is not affected by external animations during counter animation
+    element.style.transition = 'none';
+    element.style.opacity = '1';
+    element.style.transform = 'none';
+    element.style.willChange = 'auto';
+    
     const start = 0;
     const increment = target / (duration / 16); // 60fps
     let current = start;
@@ -318,6 +331,7 @@ function animateCounter(element, target, suffix = '', duration = 2000) {
         if (current >= target) {
             current = target;
             clearInterval(timer);
+            element.dataset.animating = 'false';
         }
         
         // Format the number with proper formatting and suffix
@@ -385,30 +399,51 @@ function initializeContactForm() {
 
 // Initialize counter animations
 document.addEventListener('DOMContentLoaded', () => {
+    // Prevent multiple initializations
+    if (window.counterAnimationsInitialized) {
+        return;
+    }
+    window.counterAnimationsInitialized = true;
+    
     const statNumbers = document.querySelectorAll('.stat-number');
+    
+    // Only create observer if there are stat numbers to observe
+    if (statNumbers.length === 0) return;
     
     const counterObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
-            if (entry.isIntersecting) {
+            if (entry.isIntersecting && !entry.target.dataset.animated) {
                 const element = entry.target;
                 const target = parseInt(element.getAttribute('data-target'));
                 const suffix = element.getAttribute('data-suffix') || '';
                 
                 if (target > 0) {
-                    // Reset to 0 and animate
+                    // Mark as animated to prevent re-triggering
+                    element.dataset.animated = 'true';
+                    
+                    // Reset to 0 and animate immediately
                     element.textContent = '0';
-                    setTimeout(() => {
-                        animateCounter(element, target, suffix);
-                    }, 200);
+                    animateCounter(element, target, suffix);
                 }
                 
+                // Unobserve the element to prevent re-triggering
                 counterObserver.unobserve(element);
             }
         });
-    }, { threshold: 0.5 });
+    }, { 
+        threshold: 0.3,  // Trigger when 30% of element is visible
+        rootMargin: '0px 0px -50px 0px'  // Start animation slightly before element is fully in view
+    });
     
     statNumbers.forEach(stat => {
-        counterObserver.observe(stat);
+        // Only observe if not already animated
+        if (!stat.dataset.animated) {
+            // Ensure stat numbers are not affected by other animations
+            stat.style.transition = 'none';
+            stat.style.opacity = '1';
+            stat.style.transform = 'none';
+            counterObserver.observe(stat);
+        }
     });
     
     // Initialize email obfuscation (guard if not defined)
@@ -1050,3 +1085,50 @@ function addSkeletonStyles() {
     `;
     document.head.appendChild(style);
 }
+
+// History timeline entry animation
+(function initHistoryTimelineAnimation() {
+    document.addEventListener('DOMContentLoaded', () => {
+        const entries = document.querySelectorAll('.history-entry');
+        if (entries.length === 0) return;
+
+        const io = new IntersectionObserver((changes) => {
+            changes.forEach(change => {
+                if (change.isIntersecting) {
+                    change.target.classList.add('in-view');
+                    io.unobserve(change.target);
+                }
+            });
+        }, { threshold: 0.2, rootMargin: '0px 0px -50px 0px' });
+
+        entries.forEach(entry => io.observe(entry));
+    });
+})();
+
+// History Cards Animation
+(function initHistoryCards() {
+    document.addEventListener('DOMContentLoaded', () => {
+        const historyCards = document.querySelectorAll('.history-card');
+        if (historyCards.length === 0) return;
+
+        // Create intersection observer for history cards
+        const cardsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    // Add staggered delay for smooth reveal
+                    const index = Array.from(historyCards).indexOf(entry.target);
+                    entry.target.style.transitionDelay = `${index * 0.1}s`;
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        });
+
+        // Observe all history cards
+        historyCards.forEach(card => {
+            cardsObserver.observe(card);
+        });
+    });
+})();

@@ -6,6 +6,7 @@
 </template>
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 * {
@@ -17,13 +18,12 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  font-family: 'Raleway', sans-serif;
   font-size: 16px;
   line-height: 1.6;
-  color: #1a1a1a;
+  color: rgb(10, 10, 10);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-feature-settings: 'liga' 1, 'calt' 1;
 }
 
 h1, h2, h3, h4, h5, h6 {

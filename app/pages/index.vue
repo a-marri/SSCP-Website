@@ -29,6 +29,81 @@
         </div>
       </div>
     </section>
+
+    <section class="about">
+      <div class="about__container">
+        <h2 class="about__title">Driven by Innovation</h2>
+        <div class="about__content">
+          <p>
+            Founded in 1989, the Stanford Solar Car Project is an entirely student-run, non-profit organization fueled by its members' passion for environmentally sustainable technology. We provide a unique opportunity for Stanford students to gain valuable hands-on engineering and business experience while raising community awareness of clean energy vehicles. Every two years, the team designs, builds and races a solar car across the Australian Outback in the Bridgestone World Solar Challenge.
+          </p>
+          <p>
+            In 2013, our team finished 4th overall and we were North America's No. 1 team. In 2015 and 2017 we finished 6th and 9th respectively. Building off this string of top-10 finishes, we are pushing ourselves to be more creative, innovative, and competitive than ever going into the next race.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="cards">
+      <div class="cards__container">
+        <div class="card">
+          <NuxtImg 
+            src="/card1.jpg" 
+            alt="Team members"
+            class="card__image"
+            loading="lazy"
+            format="webp"
+            quality="80"
+          />
+          <div class="card__overlay"></div>
+          <div class="card__content">
+            <h3 class="card__title">OUR TEAM</h3>
+            <div class="card__hover-content">
+              <p class="card__description">Our team is composed of an amazing group of engineers, innovators and problem solvers.</p>
+              <NuxtLink to="/team" class="card__link">Learn More →</NuxtLink>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <NuxtImg 
+            src="/card2.jpg" 
+            alt="Solar car"
+            class="card__image"
+            loading="lazy"
+            format="webp"
+            quality="80"
+          />
+          <div class="card__overlay"></div>
+          <div class="card__content">
+            <h3 class="card__title">OUR CARS</h3>
+            <div class="card__hover-content">
+              <p class="card__description">From Black Mamba to Xenith and before, our project has produced a number of unique and impressive vehicles. Take a closer look!</p>
+              <NuxtLink to="/cars" class="card__link">Learn More →</NuxtLink>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <NuxtImg 
+            src="/card3.jpg" 
+            alt="Workshop with sparks"
+            class="card__image"
+            loading="lazy"
+            format="webp"
+            quality="80"
+          />
+          <div class="card__overlay"></div>
+          <div class="card__content">
+            <h3 class="card__title">OUR SPONSORS</h3>
+            <div class="card__hover-content">
+              <p class="card__description">Our sponsors make everything we do possible, while acting as leaders in industry, sustainability, and support of the next generation.</p>
+              <NuxtLink to="/sponsors" class="card__link">Learn More →</NuxtLink>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   </div>
 </template>
 
@@ -67,6 +142,7 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   gap: 0;
+  background: #f8f8f8;
 }
 
 .hero {
@@ -155,6 +231,7 @@ onMounted(() => {
 }
 
 h1 {
+  font-family: 'Inter', sans-serif;
   font-size: clamp(2.75rem, 6vw, 4.5rem);
   font-weight: 800;
   letter-spacing: -0.03em;
@@ -166,6 +243,7 @@ h1 {
 }
 
 .hero__content p {
+  font-family: 'Inter', sans-serif;
   margin: 0;
   font-size: 1.125rem;
   font-weight: 400;
@@ -219,6 +297,41 @@ h1 {
   border-color: #fff;
 }
 
+.about {
+  padding: clamp(4rem, 8vw, 7rem) clamp(1.5rem, 5vw, 4rem);
+  background: #ffffff;
+}
+
+.about__container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.about__title {
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: #1a1a1a;
+  margin-bottom: 2.5rem;
+  text-align: center;
+}
+
+.about__content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  text-align: center;
+}
+
+.about__content p {
+  font-size: 1.125rem;
+  line-height: 1.8;
+  color: #333;
+  margin: 0;
+  text-align: center;
+}
+
 @media (max-width: 768px) {
   .hero__content {
     padding: 1.5rem;
@@ -236,6 +349,171 @@ h1 {
   .btn {
     padding: 0.875rem 1.5rem;
     font-size: 0.8rem;
+  }
+
+  .about {
+    padding: 3rem 1.5rem;
+  }
+
+  .about__title {
+    margin-bottom: 2rem;
+  }
+
+  .about__content p {
+    font-size: 1rem;
+  }
+}
+
+.cards {
+  padding: clamp(4rem, 8vw, 6rem) clamp(1.5rem, 5vw, 4rem);
+  background: #f8f8f8;
+}
+
+.cards__container {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.card {
+  position: relative;
+  aspect-ratio: 4/3;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.3) 0%,
+    rgba(0, 0, 0, 0.5) 100%
+  );
+  z-index: 1;
+}
+
+.card__content {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+  color: #fff;
+}
+
+.card__title {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.card:hover .card__title {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+.card__hover-content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+}
+
+.card:hover .card__hover-content {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.card__description {
+  font-size: 1.125rem;
+  line-height: 1.6;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+  max-width: 350px;
+  margin-bottom: 1.5rem;
+}
+
+.card__link {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #fff;
+  text-decoration: none;
+  transition: transform 0.2s ease;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+}
+
+.card__link:hover {
+  transform: translateX(4px);
+}
+
+@media (max-width: 1024px) {
+  .cards__container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+
+  .card:last-child {
+    grid-column: 1 / -1;
+    max-width: 600px;
+    margin: 0 auto;
+    width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .cards {
+    padding: 3rem 1.5rem;
+  }
+
+  .cards__container {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .card:last-child {
+    grid-column: auto;
+    max-width: none;
+  }
+
+  .card__description {
+    font-size: 1rem;
+  }
+
+  .card__title {
+    font-size: 1.5rem;
+  }
+  
+  .card__link {
+    font-size: 1rem;
   }
 }
 </style>

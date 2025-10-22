@@ -17,13 +17,13 @@
       </div>
       <div class="hero__content">
         <!-- <p class="eyebrow">Stanford Solar Car Project</p> -->
-        <h1>Pushing the limits of solar-powered racing.</h1>
-        <p>
+        <h1 class="hero-title">Pushing the limits of solar-powered racing.</h1>
+        <p class="hero-description">
           Join the student-led team designing, building, and racing world-class
           solar vehicles across the globe. Innovation, teamwork, and relentless
           pursuit of a sustainable future drive everything we do.
         </p>
-        <div class="hero__actions">
+        <div class="hero__actions hero-actions">
           <NuxtLink to="/team" class="btn primary">Meet the Team</NuxtLink>
           <NuxtLink to="/donate" class="btn ghost">Support the Mission</NuxtLink>
         </div>
@@ -362,7 +362,7 @@ onMounted(() => {
   text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
 }
 
-h1 {
+.hero-title {
   font-family: 'Inter', sans-serif;
   font-size: clamp(2.75rem, 6vw, 4.5rem);
   font-weight: 800;
@@ -372,9 +372,11 @@ h1 {
   max-width: 850px;
   text-shadow: 0 4px 40px rgba(0, 0, 0, 0.8);
   line-height: 1.1;
+  opacity: 0;
+  animation: fadeInUp 1s ease forwards 0.3s;
 }
 
-.hero__content p {
+.hero-description {
   font-family: 'Inter', sans-serif;
   margin: 0;
   font-size: 1.125rem;
@@ -383,6 +385,24 @@ h1 {
   color: rgba(255, 255, 255, 0.95);
   max-width: 650px;
   text-shadow: 0 2px 24px rgba(0, 0, 0, 0.7);
+  opacity: 0;
+  animation: fadeInUp 1s ease forwards 0.6s;
+}
+
+.hero-actions {
+  opacity: 0;
+  animation: fadeInUp 1s ease forwards 0.9s;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .hero__actions {

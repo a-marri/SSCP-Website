@@ -19,18 +19,28 @@
     <!-- Premier Sponsors -->
     <section class="sponsor-tier premier-tier">
       <div class="sponsor-tier__container">
-        <h2 class="tier-title">Premier</h2>
-        <p class="tier-subtitle">Our premier sponsors who make our mission possible</p>
+        <div class="tier-header">
+          <h2 class="tier-title premier-title">
+            <svg class="tier-icon" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
+            Premier
+          </h2>
+          <p class="tier-subtitle">Our premier sponsors who make our mission possible</p>
+        </div>
         <div class="sponsor-grid premier-grid">
           <div class="sponsor-card premier-card">
+            <div class="card-shimmer"></div>
             <NuxtImg src="/sponsors/assu.png" alt="Stanford ASSU" class="sponsor-card__logo" loading="lazy" format="webp" />
             <h3>Stanford ASSU</h3>
           </div>
           <div class="sponsor-card premier-card">
+            <div class="card-shimmer"></div>
             <NuxtImg src="/sponsors/cars.png" alt="Stanford CARS" class="sponsor-card__logo" loading="lazy" format="webp" />
             <h3>Stanford CARS</h3>
           </div>
           <div class="sponsor-card premier-card">
+            <div class="card-shimmer"></div>
             <NuxtImg src="/sponsors/fictiv.jpg" alt="Fictiv" class="sponsor-card__logo" loading="lazy" format="webp" />
             <h3>Fictiv</h3>
           </div>
@@ -41,7 +51,9 @@
     <!-- Diamond Sponsors -->
     <section class="sponsor-tier diamond-tier">
       <div class="sponsor-tier__container">
-        <h2 class="tier-title">Diamond</h2>
+        <div class="tier-header">
+          <h2 class="tier-title">Diamond</h2>
+        </div>
         <div class="sponsor-grid diamond-grid">
           <div class="sponsor-card diamond-card">
             <NuxtImg src="/sponsors/autodesk.png" alt="Autodesk" class="sponsor-card__logo" loading="lazy" format="webp" />
@@ -66,7 +78,9 @@
     <!-- Platinum Sponsors -->
     <section class="sponsor-tier platinum-tier">
       <div class="sponsor-tier__container">
-        <h2 class="tier-title">Platinum</h2>
+        <div class="tier-header">
+          <h2 class="tier-title">Platinum</h2>
+        </div>
         <div class="sponsor-grid platinum-grid">
           <div class="sponsor-card platinum-card">
             <NuxtImg src="/sponsors/siemens.png" alt="Siemens" class="sponsor-card__logo" loading="lazy" format="webp" />
@@ -91,7 +105,9 @@
     <!-- Gold Sponsors -->
     <section class="sponsor-tier gold-tier">
       <div class="sponsor-tier__container">
-        <h2 class="tier-title">Gold</h2>
+        <div class="tier-header">
+          <h2 class="tier-title">Gold</h2>
+        </div>
         <div class="sponsor-grid gold-grid">
           <div class="sponsor-card gold-card">
             <NuxtImg src="/sponsors/pointwise.jpg" alt="Pointwise" class="sponsor-card__logo" loading="lazy" format="webp" />
@@ -120,7 +136,9 @@
     <!-- Silver Sponsors -->
     <section class="sponsor-tier silver-tier">
       <div class="sponsor-tier__container">
-        <h2 class="tier-title">Silver</h2>
+        <div class="tier-header">
+          <h2 class="tier-title">Silver</h2>
+        </div>
         <div class="sponsor-grid silver-grid">
           <div class="sponsor-card silver-card">
             <NuxtImg src="/sponsors/3m.png" alt="3M" class="sponsor-card__logo" loading="lazy" format="webp" />
@@ -149,7 +167,9 @@
     <!-- Bronze Sponsors -->
     <section class="sponsor-tier bronze-tier">
       <div class="sponsor-tier__container">
-        <h2 class="tier-title">Bronze</h2>
+        <div class="tier-header">
+          <h2 class="tier-title">Bronze</h2>
+        </div>
         <div class="sponsor-grid bronze-grid">
           <div class="sponsor-card bronze-card">
             <NuxtImg src="/sponsors/nrg.png" alt="NRG" class="sponsor-card__logo" loading="lazy" format="webp" />
@@ -193,6 +213,30 @@
     </section>
   </div>
 </template>
+
+<script setup>
+import { onMounted } from 'vue';
+
+onMounted(() => {
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('fade-in-up');
+      }
+    });
+  }, observerOptions);
+
+  // Observe all sponsor cards and tier headers
+  document.querySelectorAll('.sponsor-card, .tier-header').forEach(el => {
+    observer.observe(el);
+  });
+});
+</script>
 
 <style scoped>
 .sponsors-page {
@@ -270,6 +314,19 @@
   margin: 0 auto;
 }
 
+.tier-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.tier-header.fade-in-up {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 .tier-title {
   font-size: clamp(2rem, 4vw, 2.5rem);
   font-weight: 800;
@@ -277,14 +334,60 @@
   text-transform: uppercase;
   color: #1a1a1a;
   margin-bottom: 0.5rem;
-  text-align: center;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding-bottom: 1rem;
+}
+
+.tier-icon {
+  width: 28px;
+  height: 28px;
+  color: #FFD700;
+  filter: drop-shadow(0 2px 4px rgba(255, 215, 0, 0.4));
+}
+
+.tier-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 4px;
+  border-radius: 2px;
+}
+
+.premier-tier .tier-title::after {
+  background: linear-gradient(90deg, #FFD700, #8C1515);
+  width: 80px;
+}
+
+.diamond-tier .tier-title::after {
+  background: linear-gradient(90deg, #00B4D8, #0096C7);
+}
+
+.platinum-tier .tier-title::after {
+  background: linear-gradient(90deg, #D3D3D3, #A8A8A8);
+}
+
+.gold-tier .tier-title::after {
+  background: linear-gradient(90deg, #FFD700, #DAA520);
+}
+
+.silver-tier .tier-title::after {
+  background: linear-gradient(90deg, #C0C0C0, #A8A8A8);
+}
+
+.bronze-tier .tier-title::after {
+  background: linear-gradient(90deg, #CD7F32, #B87333);
 }
 
 .tier-subtitle {
   font-size: 1.125rem;
   color: #666;
-  text-align: center;
-  margin: 0 0 3rem 0;
+  margin: 0;
 }
 
 /* Sponsor Grids */
@@ -313,42 +416,146 @@
 /* Sponsor Cards */
 .sponsor-card {
   background: #fff;
-  border-radius: 0.75rem;
-  padding: 2rem;
+  border-radius: 1rem;
+  padding: 2.5rem 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-  min-height: 180px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.6s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  min-height: 200px;
+  position: relative;
+  overflow: hidden;
+  border: 2px solid transparent;
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.sponsor-card.fade-in-up {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.sponsor-card::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 0;
+  transition: height 0.3s ease;
 }
 
 .sponsor-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+  transform: translateY(-6px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+}
+
+.sponsor-card:hover::before {
+  height: 4px;
 }
 
 .premier-card {
-  min-height: 220px;
-  box-shadow: 0 4px 12px rgba(140, 21, 21, 0.15);
+  min-height: 260px;
+  padding: 3rem 2.5rem;
+  box-shadow: 0 8px 24px rgba(140, 21, 21, 0.15);
+  border: 3px solid #8C1515;
+  background: linear-gradient(135deg, #fff 0%, #fefefe 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.premier-card::before {
+  height: 6px;
+  background: linear-gradient(90deg, #FFD700, #8C1515, #FFD700);
+  opacity: 1;
 }
 
 .premier-card:hover {
-  box-shadow: 0 12px 24px rgba(140, 21, 21, 0.25);
+  box-shadow: 0 16px 40px rgba(140, 21, 21, 0.25);
+  border-color: #a01f1f;
+}
+
+.card-shimmer {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.3) 50%,
+    transparent 70%
+  );
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
+}
+
+.premier-card:hover .card-shimmer {
+  transform: translateX(100%);
+}
+
+.diamond-card::before {
+  background: linear-gradient(90deg, transparent, #00B4D8, transparent);
+}
+
+.diamond-card:hover {
+  border-color: rgba(0, 180, 216, 0.2);
+}
+
+.platinum-card::before {
+  background: linear-gradient(90deg, transparent, #D3D3D3, transparent);
+}
+
+.platinum-card:hover {
+  border-color: rgba(211, 211, 211, 0.3);
+}
+
+.gold-card::before {
+  background: linear-gradient(90deg, transparent, #DAA520, transparent);
+}
+
+.gold-card:hover {
+  border-color: rgba(218, 165, 32, 0.2);
+}
+
+.silver-card::before {
+  background: linear-gradient(90deg, transparent, #C0C0C0, transparent);
+}
+
+.silver-card:hover {
+  border-color: rgba(192, 192, 192, 0.3);
+}
+
+.bronze-card::before {
+  background: linear-gradient(90deg, transparent, #CD7F32, transparent);
+}
+
+.bronze-card:hover {
+  border-color: rgba(205, 127, 50, 0.2);
 }
 
 .sponsor-card__logo {
   width: 100%;
-  max-width: 180px;
+  max-width: 160px;
   height: auto;
   object-fit: contain;
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
+  transition: transform 0.3s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.sponsor-card:hover .sponsor-card__logo {
+  transform: scale(1.05);
 }
 
 .premier-card .sponsor-card__logo {
-  max-width: 220px;
+  max-width: 240px;
+  margin-bottom: 1.5rem;
 }
 
 .sponsor-card h3 {
@@ -356,10 +563,13 @@
   font-weight: 700;
   color: #1a1a1a;
   margin: 0;
+  position: relative;
+  z-index: 1;
 }
 
 .premier-card h3 {
-  font-size: 1.25rem;
+  font-size: 1.375rem;
+  font-weight: 800;
 }
 
 /* CTA Section */

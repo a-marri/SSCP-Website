@@ -16,7 +16,7 @@
         <div class="hero__overlay"></div>
       </div>
       <div class="hero__content">
-        <p class="eyebrow">Stanford Solar Car Project</p>
+        <!-- <p class="eyebrow">Stanford Solar Car Project</p> -->
         <h1>Pushing the limits of solar-powered racing.</h1>
         <p>
           Join the student-led team designing, building, and racing world-class
@@ -195,9 +195,9 @@ h1 {
 }
 
 .btn.primary {
-  background: linear-gradient(135deg, #c1121f, #f15b2a);
+  background: #8C1515;
   color: #fff;
-  box-shadow: 0 12px 25px rgba(193, 18, 31, 0.5);
+  box-shadow: 0 12px 25px rgba(140, 21, 21, 0.5);
 }
 
 .btn.ghost {

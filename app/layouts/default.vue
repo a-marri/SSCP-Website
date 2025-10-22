@@ -74,7 +74,7 @@ const isActive = (link: { to: string }) => route.path === link.to;
 }
 
 .brand__text {
-  font-size: 0.9rem;
+  font-size: 1.2rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -99,7 +99,7 @@ const isActive = (link: { to: string }) => route.path === link.to;
   display: inline-flex;
   align-items: center;
   font-weight: 600;
-  font-size: 0.875rem;
+  font-size: 1rem;
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: #1a1a1a;

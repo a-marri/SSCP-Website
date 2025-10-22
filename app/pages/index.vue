@@ -104,11 +104,140 @@
         </div>
       </div>
     </section>
+
+    <section class="stats">
+      <div class="stats__container">
+        <div class="stat">
+          <div class="stat__number" data-target="36">
+            <span class="stat__digit" ref="stat1">0</span>
+          </div>
+          <div class="stat__label">Years Since Founding</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat__number" data-target="100000">
+            <span class="stat__digit" ref="stat2">0</span>
+            <span class="stat__suffix">+</span>
+          </div>
+          <div class="stat__label">Solar Powered Miles</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat__number" data-target="14">
+            <span class="stat__digit" ref="stat3">0</span>
+          </div>
+          <div class="stat__label">Cars Built</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat__number">
+            <span class="stat__text" ref="countlessText">XXXXXXXXX</span>
+          </div>
+          <div class="stat__label">Memories Made</div>
+        </div>
+      </div>
+    </section>
   </div>
 </template>
 
 <script setup>
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
+
+const stat1 = ref(null);
+const stat2 = ref(null);
+const stat3 = ref(null);
+const countlessText = ref(null);
+
+const animateValue = (element, start, end, duration) => {
+  const range = end - start;
+  const increment = range / (duration / 16);
+  let current = start;
+  
+  const timer = setInterval(() => {
+    current += increment;
+    if (current >= end) {
+      element.textContent = end.toLocaleString();
+      clearInterval(timer);
+    } else {
+      element.textContent = Math.floor(current).toLocaleString();
+    }
+  }, 16);
+};
+
+const animateCountless = () => {
+  const text = 'Countless';
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const element = countlessText.value;
+  
+  if (!element) return;
+  
+  let resolved = 0;
+  const letters = text.split('');
+  let iterations = 0;
+  const maxIterations = 15; // More iterations for more letter cycling
+  
+  const animate = () => {
+    let display = letters.map((letter, index) => {
+      if (index < resolved) {
+        return letter;
+      }
+      return chars[Math.floor(Math.random() * chars.length)];
+    }).join('');
+    
+    element.textContent = display;
+    
+    iterations++;
+    
+    // Resolve a letter every few iterations
+    if (iterations % 3 === 0 && resolved < letters.length) {
+      resolved++;
+    }
+    
+    if (iterations < maxIterations || resolved < letters.length) {
+      setTimeout(() => animate(), 30); // Faster cycling - 30ms
+    } else {
+      element.textContent = text; // Ensure final text is correct
+    }
+  };
+  
+  // Start immediately without delay
+  animate();
+};
+
+const observeStats = () => {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const element = entry.target;
+        const target = parseInt(element.dataset.target);
+        const digit = element.querySelector('.stat__digit');
+        
+        if (digit && !element.classList.contains('animated')) {
+          element.classList.add('animated');
+          animateValue(digit, 0, target, 2000);
+        }
+      }
+    });
+  }, { threshold: 0.5 });
+
+  document.querySelectorAll('.stat__number[data-target]').forEach(stat => {
+    observer.observe(stat);
+  });
+
+  // Observe the countless text
+  const countlessObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && countlessText.value && !countlessText.value.classList.contains('animated')) {
+        countlessText.value.classList.add('animated');
+        animateCountless();
+      }
+    });
+  }, { threshold: 0.5 });
+
+  if (countlessText.value) {
+    countlessObserver.observe(countlessText.value.parentElement);
+  }
+};
 
 onMounted(() => {
   // Load Player.js script
@@ -134,6 +263,9 @@ onMounted(() => {
     });
   };
   document.head.appendChild(script);
+
+  // Initialize stats animation observer
+  observeStats();
 });
 </script>
 
@@ -169,9 +301,9 @@ onMounted(() => {
   inset: 0;
   background: linear-gradient(
     to bottom,
-    rgba(0, 0, 0, 0.4) 0%,
-    rgba(0, 0, 0, 0.3) 50%,
-    rgba(0, 0, 0, 0.5) 100%
+    rgba(0, 0, 0, 0.25) 0%,
+    rgba(0, 0, 0, 0.15) 50%,
+    rgba(0, 0, 0, 0.35) 100%
   );
   z-index: 1;
   pointer-events: none;
@@ -402,8 +534,8 @@ h1 {
   inset: 0;
   background: linear-gradient(
     to bottom,
-    rgba(0, 0, 0, 0.3) 0%,
-    rgba(0, 0, 0, 0.5) 100%
+    rgba(0, 0, 0, 0.2) 0%,
+    rgba(0, 0, 0, 0.4) 100%
   );
   z-index: 1;
 }
@@ -514,6 +646,106 @@ h1 {
   
   .card__link {
     font-size: 1rem;
+  }
+}
+
+/* Stats Section */
+.stats {
+  padding: clamp(3rem, 6vw, 5rem) clamp(1.5rem, 5vw, 4rem);
+  background: linear-gradient(135deg, #8C1515 0%, #a01f1f 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.stats::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  opacity: 0.4;
+}
+
+.stats__container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.stat {
+  text-align: center;
+  color: #fff;
+}
+
+.stat__number {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(2.25rem, 4vw, 3.5rem);
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.02em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  min-height: auto;
+}
+
+.stat__digit {
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+.stat__suffix {
+  font-size: 0.7em;
+  opacity: 0.9;
+}
+
+.stat__text {
+  font-family: ui-monospace, 'SF Mono', 'Roboto Mono', 'Menlo', 'Consolas', monospace;
+  font-weight: 800;
+  letter-spacing: 0;
+}
+
+.stat__label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.95;
+  line-height: 1.5;
+}
+
+@media (max-width: 1024px) {
+  .stats__container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.5rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .stats {
+    padding: 3rem 1.5rem;
+  }
+
+  .stats__container {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .stat__number {
+    font-size: clamp(2rem, 8vw, 2.5rem);
+    margin-bottom: 0.5rem;
+  }
+
+  .stat__label {
+    font-size: 0.875rem;
   }
 }
 </style>

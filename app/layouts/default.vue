@@ -20,6 +20,12 @@
     <main>
       <slot />
     </main>
+    <footer class="footer">
+      <div class="footer__content">
+        <p class="footer__motto">"Test it again"</p>
+        <p class="footer__copyright">© {{ currentYear }} Stanford Solar Car Project</p>
+      </div>
+    </footer>
   </div>
 </template>
 
@@ -27,15 +33,15 @@
 const links = [
   { label: "Home", to: "/" },
   { label: "Sponsors", to: "/sponsors" },
-  { label: "Blog", to: "/blog" },
+  { label: "Advisors", to: "/faculty" },
   { label: "Team", to: "/team" },
   { label: "Cars", to: "/cars" },
-  { label: "Contact", to: "/contact" },
-  { label: "Media", to: "/media" },
-  { label: "Donate", to: "/donate" }
+  { label: "Join", to: "/join" },
+  { label: "Contact", to: "/contact" }
 ];
 
 const route = useRoute();
+const currentYear = new Date().getFullYear();
 
 const isActive = (link: { to: string }) => route.path === link.to;
 </script>
@@ -139,6 +145,47 @@ main {
   }
 
   .brand__text {
+    font-size: 0.85rem;
+  }
+}
+
+.footer {
+  background: #1a1a1a;
+  color: #fff;
+  padding: 2.5rem clamp(1.5rem, 5vw, 4rem);
+  text-align: center;
+}
+
+.footer__content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer__motto {
+  font-size: 1.5rem;
+  font-weight: 700;
+  font-style: italic;
+  color: #fff;
+  margin: 0 0 1rem 0;
+  opacity: 0.95;
+}
+
+.footer__copyright {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+}
+
+@media (max-width: 640px) {
+  .footer {
+    padding: 2rem 1.5rem;
+  }
+
+  .footer__motto {
+    font-size: 1rem;
+  }
+
+  .footer__copyright {
     font-size: 0.85rem;
   }
 }

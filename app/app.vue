@@ -1,6 +1,9 @@
 <template>
   <NuxtLayout>
-    <NuxtPage />
+    <NuxtPage :transition="{
+      name: 'page',
+      mode: 'out-in'
+    }" />
   </NuxtLayout>
   <NuxtRouteAnnouncer />
 </template>
@@ -34,5 +37,21 @@ h1, h2, h3, h4, h5, h6 {
 
 p {
   line-height: 1.7;
+}
+
+/* Page Transitions */
+.page-enter-active,
+.page-leave-active {
+  transition: all 0.3s ease;
+}
+
+.page-enter-from {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.page-leave-to {
+  opacity: 0;
+  transform: translateY(-20px);
 }
 </style>
